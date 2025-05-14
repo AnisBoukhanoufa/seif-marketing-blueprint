@@ -135,6 +135,7 @@ const Blog = () => {
   const [visiblePosts, setVisiblePosts] = useState(6);
   const [activeCategory, setActiveCategory] = useState("All Topics");
   const [filteredPosts, setFilteredPosts] = useState(blogPosts);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(true);
   
   useEffect(() => {
     document.title = "Blog - Seif Marketing";
@@ -167,10 +168,26 @@ const Blog = () => {
       setFilteredPosts(blogPosts.filter(post => post.category === activeCategory));
     }
     setVisiblePosts(6);
+    
+    // Reset the load more button
+    setShowLoadMoreButton(true);
   }, [activeCategory]);
   
+  useEffect(() => {
+    // Hide load more button when all posts are visible
+    if (visiblePosts >= filteredPosts.length) {
+      setShowLoadMoreButton(false);
+    }
+  }, [visiblePosts, filteredPosts]);
+  
   const handleLoadMore = () => {
-    setVisiblePosts(prevVisible => prevVisible + 6);
+    const newVisiblePosts = visiblePosts + 6;
+    setVisiblePosts(newVisiblePosts);
+    
+    // Hide button if all posts will be visible
+    if (newVisiblePosts >= filteredPosts.length) {
+      setShowLoadMoreButton(false);
+    }
   };
   
   const uniqueCategories = ["All Topics", ...new Set(blogPosts.map(post => post.category))];
@@ -194,8 +211,11 @@ const Blog = () => {
               {uniqueCategories.map((category, index) => (
                 <Button 
                   key={index} 
-                  variant={activeCategory === category ? "outline" : "outline"} 
-                  className={`border-${activeCategory === category ? 'seif-purple text-seif-purple' : 'gray-200'}`}
+                  variant={activeCategory === category ? "default" : "outline"} 
+                  className={activeCategory === category ? 
+                    "bg-seif-purple hover:bg-seif-purple-dark" : 
+                    "border-gray-200 hover:border-seif-purple hover:text-seif-purple"
+                  }
                   onClick={() => setActiveCategory(category)}
                 >
                   {category}
@@ -208,56 +228,69 @@ const Blog = () => {
         {/* Blog Grid */}
         <section className="py-16 bg-white">
           <div className="container mx-auto">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredPosts.slice(0, visiblePosts).map((post, index) => (
-                <Card 
-                  key={post.id} 
-                  className="overflow-hidden border border-gray-100 hover:shadow-md transition-shadow reveal"
-                  style={{ animationDelay: `${0.1 * (index % 3 + 1)}s` }}
-                >
-                  <div className="h-48 bg-gray-100 relative">
-                    <div className="absolute top-4 left-4 bg-seif-purple text-white text-xs font-medium px-3 py-1 rounded-full">
-                      {post.category}
+            {filteredPosts.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredPosts.slice(0, visiblePosts).map((post, index) => (
+                  <Card 
+                    key={post.id} 
+                    className="overflow-hidden border border-gray-100 hover:shadow-md transition-shadow reveal flex flex-col"
+                    style={{ animationDelay: `${0.1 * (index % 3 + 1)}s` }}
+                  >
+                    <div className="h-48 bg-gray-100 relative">
+                      <div className="absolute top-4 left-4 bg-seif-purple text-white text-xs font-medium px-3 py-1 rounded-full">
+                        {post.category}
+                      </div>
                     </div>
-                  </div>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">
-                      <Link to={`/blog/${post.id}`} className="hover:text-seif-purple transition-colors">
-                        {post.title}
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-xl">
+                        <Link to={`/blog/${post.id}`} className="hover:text-seif-purple transition-colors">
+                          {post.title}
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <CardDescription className="text-gray-600 mb-4">
+                        {post.excerpt}
+                      </CardDescription>
+                      <div className="flex items-center text-sm text-gray-500 space-x-4">
+                        <div className="flex items-center">
+                          <User className="h-4 w-4 mr-1" />
+                          <span>{post.author}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1" />
+                          <span>{post.date}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-1" />
+                          <span>{post.readTime}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="mt-auto">
+                      <Link to={`/blog/${post.id}`}>
+                        <Button variant="link" className="text-seif-purple p-0">
+                          Read More
+                        </Button>
                       </Link>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-gray-600 mb-4">
-                      {post.excerpt}
-                    </CardDescription>
-                    <div className="flex items-center text-sm text-gray-500 space-x-4">
-                      <div className="flex items-center">
-                        <User className="h-4 w-4 mr-1" />
-                        <span>{post.author}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        <span>{post.date}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-1" />
-                        <span>{post.readTime}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Link to={`/blog/${post.id}`}>
-                      <Button variant="link" className="text-seif-purple p-0">
-                        Read More
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20">
+                <h3 className="text-2xl font-medium mb-4">No articles found</h3>
+                <p className="text-gray-500 mb-6">There are no articles in this category yet.</p>
+                <Button 
+                  className="bg-seif-purple hover:bg-seif-purple-dark"
+                  onClick={() => setActiveCategory("All Topics")}
+                >
+                  View All Articles
+                </Button>
+              </div>
+            )}
             
-            {visiblePosts < filteredPosts.length && (
+            {showLoadMoreButton && filteredPosts.length > visiblePosts && (
               <div className="mt-12 text-center">
                 <Button 
                   className="bg-seif-purple hover:bg-seif-purple-dark"
