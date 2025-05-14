@@ -7,6 +7,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, User } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 export const blogPosts = [
   {
@@ -161,28 +162,41 @@ const Blog = () => {
     };
   }, []);
   
+  // Fix the filtering functionality
   useEffect(() => {
     if (activeCategory === "All Topics") {
-      setFilteredPosts(blogPosts);
+      setFilteredPosts([...blogPosts]);
     } else {
-      setFilteredPosts(blogPosts.filter(post => post.category === activeCategory));
+      const filtered = blogPosts.filter(post => post.category === activeCategory);
+      setFilteredPosts(filtered);
     }
+    
+    // Reset visible posts when changing categories
     setVisiblePosts(6);
     
-    // Reset the load more button
-    setShowLoadMoreButton(true);
+    // Show the load more button only if there are more posts to load
+    setShowLoadMoreButton(filteredPosts.length > 6);
   }, [activeCategory]);
   
+  // Fix the load more button visibility
   useEffect(() => {
-    // Hide load more button when all posts are visible
     if (visiblePosts >= filteredPosts.length) {
       setShowLoadMoreButton(false);
+    } else {
+      setShowLoadMoreButton(true);
     }
   }, [visiblePosts, filteredPosts]);
   
+  // Fix the load more functionality
   const handleLoadMore = () => {
     const newVisiblePosts = visiblePosts + 6;
     setVisiblePosts(newVisiblePosts);
+    
+    // Notify user that more posts were loaded
+    toast({
+      title: "More articles loaded",
+      description: "Showing more articles from this category."
+    });
     
     // Hide button if all posts will be visible
     if (newVisiblePosts >= filteredPosts.length) {
@@ -190,7 +204,26 @@ const Blog = () => {
     }
   };
   
-  const uniqueCategories = ["All Topics", ...new Set(blogPosts.map(post => post.category))];
+  // Get unique categories for the filter buttons
+  const uniqueCategories = ["All Topics", ...Array.from(new Set(blogPosts.map(post => post.category)))];
+  
+  // Handle category filter click
+  const handleCategoryClick = (category: string) => {
+    setActiveCategory(category);
+    
+    // Notify user about filter change
+    if (category !== "All Topics") {
+      toast({
+        title: `Filtered by ${category}`,
+        description: `Showing articles in the ${category} category.`
+      });
+    } else {
+      toast({
+        title: "All topics",
+        description: "Showing articles from all categories."
+      });
+    }
+  };
   
   return (
     <div className="min-h-screen">
@@ -216,7 +249,7 @@ const Blog = () => {
                     "bg-seif-purple hover:bg-seif-purple-dark" : 
                     "border-gray-200 hover:border-seif-purple hover:text-seif-purple"
                   }
-                  onClick={() => setActiveCategory(category)}
+                  onClick={() => handleCategoryClick(category)}
                 >
                   {category}
                 </Button>
