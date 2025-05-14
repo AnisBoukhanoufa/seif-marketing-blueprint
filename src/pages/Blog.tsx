@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -68,10 +68,74 @@ export const blogPosts = [
     readTime: "9 min read", 
     category: "Customer Experience",
     image: "/placeholder.svg"
+  },
+  {
+    id: 7,
+    title: "Email Marketing Campaigns That Convert",
+    excerpt: "Best practices for creating email campaigns that drive engagement, clicks, and ultimately conversions.",
+    author: "Leila Benali",
+    date: "April 5, 2025",
+    readTime: "7 min read",
+    category: "Email Marketing",
+    image: "/placeholder.svg"
+  },
+  {
+    id: 8,
+    title: "The Psychology of Color in Marketing",
+    excerpt: "How different colors influence consumer behavior and how to leverage color psychology in your branding.",
+    author: "Karim Tousi",
+    date: "March 30, 2025",
+    readTime: "8 min read",
+    category: "Branding",
+    image: "/placeholder.svg"
+  },
+  {
+    id: 9,
+    title: "Voice Search Optimization for eCommerce",
+    excerpt: "How to optimize your online store for the growing trend of voice search and virtual assistants.",
+    author: "Sarah Ahmed",
+    date: "March 25, 2025",
+    readTime: "6 min read",
+    category: "eCommerce",
+    image: "/placeholder.svg"
+  },
+  {
+    id: 10,
+    title: "Creating Viral Content: Strategy vs. Luck",
+    excerpt: "An analysis of what makes content go viral and how to increase your chances of creating shareable content.",
+    author: "Mohammed El-Masri",
+    date: "March 20, 2025",
+    readTime: "10 min read",
+    category: "Social Media",
+    image: "/placeholder.svg"
+  },
+  {
+    id: 11,
+    title: "Mobile-First Marketing: Why It Matters",
+    excerpt: "The importance of prioritizing mobile experiences in your marketing strategy and how to implement it effectively.",
+    author: "Leila Benali",
+    date: "March 15, 2025",
+    readTime: "7 min read",
+    category: "Technology",
+    image: "/placeholder.svg"
+  },
+  {
+    id: 12,
+    title: "Data Privacy and Marketing: Navigating the New Landscape",
+    excerpt: "How to balance effective marketing with increasing privacy regulations and consumer expectations.",
+    author: "Karim Tousi",
+    date: "March 10, 2025",
+    readTime: "9 min read",
+    category: "Analytics",
+    image: "/placeholder.svg"
   }
 ];
 
 const Blog = () => {
+  const [visiblePosts, setVisiblePosts] = useState(6);
+  const [activeCategory, setActiveCategory] = useState("All Topics");
+  const [filteredPosts, setFilteredPosts] = useState(blogPosts);
+  
   useEffect(() => {
     document.title = "Blog - Seif Marketing";
     
@@ -96,6 +160,21 @@ const Blog = () => {
     };
   }, []);
   
+  useEffect(() => {
+    if (activeCategory === "All Topics") {
+      setFilteredPosts(blogPosts);
+    } else {
+      setFilteredPosts(blogPosts.filter(post => post.category === activeCategory));
+    }
+    setVisiblePosts(6);
+  }, [activeCategory]);
+  
+  const handleLoadMore = () => {
+    setVisiblePosts(prevVisible => prevVisible + 6);
+  };
+  
+  const uniqueCategories = ["All Topics", ...new Set(blogPosts.map(post => post.category))];
+  
   return (
     <div className="min-h-screen">
       <Navbar />
@@ -112,12 +191,16 @@ const Blog = () => {
             </p>
             
             <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="outline" className="border-seif-purple text-seif-purple">
-                All Topics
-              </Button>
-              <Button variant="outline" className="border-gray-200">eCommerce</Button>
-              <Button variant="outline" className="border-gray-200">Social Media</Button>
-              <Button variant="outline" className="border-gray-200">Analytics</Button>
+              {uniqueCategories.map((category, index) => (
+                <Button 
+                  key={index} 
+                  variant={activeCategory === category ? "outline" : "outline"} 
+                  className={`border-${activeCategory === category ? 'seif-purple text-seif-purple' : 'gray-200'}`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </Button>
+              ))}
             </div>
           </div>
         </section>
@@ -126,7 +209,7 @@ const Blog = () => {
         <section className="py-16 bg-white">
           <div className="container mx-auto">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {blogPosts.map((post, index) => (
+              {filteredPosts.slice(0, visiblePosts).map((post, index) => (
                 <Card 
                   key={post.id} 
                   className="overflow-hidden border border-gray-100 hover:shadow-md transition-shadow reveal"
@@ -174,11 +257,16 @@ const Blog = () => {
               ))}
             </div>
             
-            <div className="mt-12 text-center">
-              <Button className="bg-seif-purple hover:bg-seif-purple-dark">
-                Load More Articles
-              </Button>
-            </div>
+            {visiblePosts < filteredPosts.length && (
+              <div className="mt-12 text-center">
+                <Button 
+                  className="bg-seif-purple hover:bg-seif-purple-dark"
+                  onClick={handleLoadMore}
+                >
+                  Load More Articles
+                </Button>
+              </div>
+            )}
           </div>
         </section>
       </main>

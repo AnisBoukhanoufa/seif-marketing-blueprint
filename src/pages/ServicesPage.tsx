@@ -7,6 +7,7 @@ import Services from "@/components/Services";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, ArrowRight } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const ServicesPage = () => {
   useEffect(() => {
@@ -32,6 +33,13 @@ const ServicesPage = () => {
       });
     };
   }, []);
+  
+  const handleGetStarted = () => {
+    toast({
+      title: "Package Selected!",
+      description: "Thank you for your interest. Our team will contact you shortly.",
+    });
+  };
   
   const packages = [
     {
@@ -110,7 +118,7 @@ const ServicesPage = () => {
               {packages.map((pkg, index) => (
                 <Card 
                   key={index} 
-                  className={`border ${pkg.highlighted ? 'border-seif-purple shadow-lg relative' : 'border-gray-200'} reveal`} 
+                  className={`border ${pkg.highlighted ? 'border-seif-purple shadow-lg relative' : 'border-gray-200'} reveal flex flex-col`} 
                   style={{ animationDelay: `${0.1 * (index + 1)}s` }}
                 >
                   {pkg.highlighted && (
@@ -126,7 +134,7 @@ const ServicesPage = () => {
                       <span className="text-gray-500">/month</span>
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="flex-grow">
                     <ul className="space-y-3">
                       {pkg.features.map((feature, i) => (
                         <li key={i} className="flex items-start gap-2">
@@ -135,13 +143,16 @@ const ServicesPage = () => {
                         </li>
                       ))}
                     </ul>
+                  </CardContent>
+                  <div className="p-6 pt-0 mt-auto">
                     <Button 
-                      className={`w-full mt-6 ${pkg.highlighted ? 'bg-seif-purple hover:bg-seif-purple-dark' : 'bg-gray-800 hover:bg-gray-700'}`}
+                      className={`w-full ${pkg.highlighted ? 'bg-seif-purple hover:bg-seif-purple-dark' : 'bg-gray-800 hover:bg-gray-700'}`}
+                      onClick={handleGetStarted}
                     >
                       Get Started
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
-                  </CardContent>
+                  </div>
                 </Card>
               ))}
             </div>

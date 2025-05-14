@@ -2,6 +2,8 @@
 import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { toast } from "@/hooks/use-toast";
 
 const Hero = () => {
   useEffect(() => {
@@ -26,6 +28,13 @@ const Hero = () => {
     };
   }, []);
 
+  const handleGetStarted = () => {
+    toast({
+      title: "Thank you for your interest!",
+      description: "Our team will contact you shortly to discuss your needs.",
+    });
+  };
+
   return (
     <section id="home" className="min-h-screen flex items-center relative overflow-hidden pt-20 pb-16">
       {/* Background Elements */}
@@ -41,12 +50,21 @@ const Hero = () => {
             Specializing in comprehensive marketing strategies and eCommerce solutions to drive your business forward.
           </p>
           <div className="flex flex-wrap gap-4 pt-4">
-            <Button className="bg-seif-purple hover:bg-seif-purple-dark text-white px-6 py-6">
+            <Button 
+              className="bg-seif-purple hover:bg-seif-purple-dark text-white px-6 py-6"
+              onClick={handleGetStarted}
+            >
               Get Started
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="outline" className="border-seif-purple text-seif-purple-dark hover:bg-seif-purple-light px-6 py-6">
-              Our Services
+            <Button 
+              variant="outline" 
+              className="border-seif-purple text-seif-purple-dark hover:bg-seif-purple-light px-6 py-6"
+              asChild
+            >
+              <Link to="/services">
+                Our Services
+              </Link>
             </Button>
           </div>
         </div>
