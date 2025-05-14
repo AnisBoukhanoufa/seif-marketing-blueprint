@@ -3,11 +3,12 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,6 +33,17 @@ const Navbar = () => {
     { name: "Contact", href: "/contact" }
   ];
 
+  const isActive = (path) => {
+    if (path === "/" && location.pathname === "/") {
+      return true;
+    }
+    return location.pathname === path || (path !== "/" && location.pathname.startsWith(path));
+  };
+
+  const handleGetStarted = () => {
+    window.location.href = "/contact";
+  };
+
   return (
     <nav
       className={cn(
@@ -51,13 +63,23 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-gray-800 hover:text-seif-purple transition-colors font-medium"
+                className={cn(
+                  "transition-colors font-medium",
+                  isActive(link.href)
+                    ? "text-seif-purple font-bold border-b-2 border-seif-purple"
+                    : "text-gray-800 hover:text-seif-purple"
+                )}
               >
                 {link.name}
               </Link>
             ))}
           </div>
-          <Button className="bg-seif-purple hover:bg-seif-purple-dark">Get Started</Button>
+          <Button 
+            className="bg-seif-purple hover:bg-seif-purple-dark"
+            onClick={handleGetStarted}
+          >
+            Get Started
+          </Button>
         </div>
 
         {/* Mobile menu button */}
@@ -80,12 +102,20 @@ const Navbar = () => {
                 key={link.name}
                 to={link.href}
                 onClick={toggleMenu}
-                className="text-gray-800 hover:text-seif-purple py-2 block transition-colors"
+                className={cn(
+                  "py-2 block transition-colors",
+                  isActive(link.href)
+                    ? "text-seif-purple font-bold border-l-4 border-seif-purple pl-2"
+                    : "text-gray-800 hover:text-seif-purple"
+                )}
               >
                 {link.name}
               </Link>
             ))}
-            <Button className="bg-seif-purple hover:bg-seif-purple-dark w-full mt-2">
+            <Button 
+              className="bg-seif-purple hover:bg-seif-purple-dark w-full mt-2"
+              onClick={handleGetStarted}
+            >
               Get Started
             </Button>
           </div>

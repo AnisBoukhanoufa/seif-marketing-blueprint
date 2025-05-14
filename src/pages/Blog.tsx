@@ -1,5 +1,6 @@
 
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -7,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, User } from "lucide-react";
 
-const blogPosts = [
+export const blogPosts = [
   {
     id: 1,
     title: "10 Effective Strategies for eCommerce Growth in 2025",
@@ -110,7 +111,7 @@ const Blog = () => {
               Expert tips, industry trends, and proven tactics to elevate your marketing game
             </p>
             
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-wrap justify-center gap-4">
               <Button variant="outline" className="border-seif-purple text-seif-purple">
                 All Topics
               </Button>
@@ -137,7 +138,11 @@ const Blog = () => {
                     </div>
                   </div>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-xl">{post.title}</CardTitle>
+                    <CardTitle className="text-xl">
+                      <Link to={`/blog/${post.id}`} className="hover:text-seif-purple transition-colors">
+                        {post.title}
+                      </Link>
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <CardDescription className="text-gray-600 mb-4">
@@ -159,9 +164,11 @@ const Blog = () => {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button variant="link" className="text-seif-purple p-0">
-                      Read More
-                    </Button>
+                    <Link to={`/blog/${post.id}`}>
+                      <Button variant="link" className="text-seif-purple p-0">
+                        Read More
+                      </Button>
+                    </Link>
                   </CardFooter>
                 </Card>
               ))}
