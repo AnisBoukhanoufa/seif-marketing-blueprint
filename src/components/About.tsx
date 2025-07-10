@@ -64,10 +64,10 @@ const About = () => {
           <div className="grid grid-cols-2 gap-4 reveal" style={{ animationDelay: '0.4s' }}>
             <div className="space-y-4">
               <div className="bg-seif-purple/10 rounded-2xl h-64 p-6 flex flex-col justify-end">
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm">
+                {/* <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm">
                   <div className="text-4xl font-bold text-seif-purple mb-2">10+</div>
                   <p className="text-gray-700">Years of Experience</p>
-                </div>
+                </div> */}
               </div>
               <div className="bg-seif-gray-light rounded-2xl h-40"></div>
             </div>
@@ -75,10 +75,10 @@ const About = () => {
             <div className="space-y-4 mt-8">
               <div className="bg-seif-gray-light rounded-2xl h-40"></div>
               <div className="bg-seif-purple/20 rounded-2xl h-64 p-6 flex flex-col justify-end">
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm">
+                {/* <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 shadow-sm">
                   <div className="text-4xl font-bold text-seif-purple mb-2">150+</div>
                   <p className="text-gray-700">Successful Projects</p>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

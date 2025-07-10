@@ -4,9 +4,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import Services from "@/components/Services";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, ArrowRight } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+// import { CheckCircle, ArrowRight } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const ServicesPage = () => {
@@ -105,7 +105,7 @@ const ServicesPage = () => {
         <Services />
         
         {/* Service Packages */}
-        <section className="py-16 bg-white">
+        {/* <section className="py-16 bg-white">
           <div className="container mx-auto">
             <div className="text-center mb-12 reveal">
               <h2 className="text-3xl font-bold mb-4">Our Service Packages</h2>
@@ -157,7 +157,7 @@ const ServicesPage = () => {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
       </main>
       <Footer />
       <ScrollToTop />
