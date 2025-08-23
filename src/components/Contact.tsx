@@ -103,7 +103,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <p className="font-medium">Email</p>
-                  <p className="text-gray-600">contact@seifmarketing.com</p>
+                  <p className="text-gray-600">info@seifmarketing.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -115,17 +115,7 @@ const Contact = () => {
                   <p className="text-gray-600">437-984-9671</p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-seif-purple/10 flex items-center justify-center flex-shrink-0">
-                  <Phone className="h-5 w-5 text-seif-purple" />
-                </div>
-                <div>
-                  <p className="font-medium">Phone 2</p>
-                  <p className="text-gray-600">437-984-9651</p>
-                </div>
-              </div>
-
-
+              
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded-full bg-seif-purple/10 flex items-center justify-center flex-shrink-0">
                   <MapPin className="h-5 w-5 text-seif-purple" />
@@ -133,7 +123,7 @@ const Contact = () => {
                 <div>
                   <p className="font-medium">Address</p>
                   <p className="text-gray-600 capitalize">
-                    conception bay south New found land
+                    conception bay south Newfoundland
                   </p>
                 </div>
               </div>
